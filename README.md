@@ -1,16 +1,10 @@
-Chris Hutchinson - Solutions Engineer Challenge 
+Chris Hutchinson - Headless Web SDK Integration Challenge 
 
-Test Transactions: 7 Total 
-Authorized 5 : order-CH123.0.09971472462371866, order-CH123.0.3983271169392686, order-CH123.0.09196400884670686, order-CH123.0.8210111413359875,
-order-CH123.0.2453261320506026
+I integrated the headless web SDK with the ability to process card payments, paypal, google pay and apple pay. 
 
-Declined 2 : order-CH123.0.7151044521369114, order-123.0.7316126306649526
-
-
-Added Primer Features:  
-1. 3DS is commented out but if you remove the line comments I used the 3DS_Challenge_Success test token to invoke 3DS modal in a few of the authorized transactions. 
-2. Added additional information to provide alternate payments on universal checkout. (GooglePay)
-3. Also added customer data to payments API call to use vault payment onSuccess.
+Shortcomings - 
+1. Was not able to get the style to be passed when primer card fields are added to checkout page. 
+2. Was not able to get checkout to move to confirmation page upon checkoutcomplete callback. 
 
 
 
