@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- <style>
+      #checkout-container {
+        display: flex;
+        flex-direction: column;
+        padding: 12px 24px;
+      }
+    </style> -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://assets.primer.io/primer-sdk-web/v1-latest/Checkout.css"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+    <link rel="stylesheet" href="/static/transitions.css" />
+  </head>
+  <body>
+    <h1>Primer Test Integration</h1>
+    
+    <div id="root">
+      <div id="content">
+        <div class="order">
+          <div id="back-button">
+            <div class="back-icon"></div>
+            <span>Back to shop</span>
+          </div>
+          <div class="order-header">
+            <div class="order-header__title">Summary of your order</div>
+          </div>
+          <div class="order-item-list">
+            <!-- Hoodie -->
+            <div class="order-item">
+              <div class="order-item__content">
+                <img
+                  class="order-item__image"
+                  src="/static/images/snowboard.jpeg"
+                />
+                <div class="order-item__text-content">
+                  <div class="order-item__description-content">
+                    <div class="order-item__title">
+                      Gnu Riders Choice C2X Snowboard 2022
+                    </div>
+                    <div class="order-item__description">
+                      Size: 158W
+                    </div>
+                  </div>
+                  <div class="pass-quantity col-lg-3 col-md-4 col-sm-3">
+                    <label for="pass-quantity" class="pass-quantity">Quantity</label>
+                    <input class="form-control" type="number" id="snowboard-quantity" value="1" min="1">
+                  </div>
+                  <div class="order-item__amount" id="hoodie-amount">$599.99</div>
+                </div>
+              </div>
+            </div>
+            <!-- Shipping -->
+            <div class="order-item">
+              <div class="order-item__content">
+                <div class="order-item__text-content">
+                  <div class="order-item__description-content">
+                    <div class="order-item__description">
+                      Shipping method
+                    </div>
+                  </div>
+                  <div class="order-item__amount">FREE</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Taxes -->
+            <div class="order-item">
+              <div class="order-item__content">
+                <div class="order-item__text-content">
+                  <div class="order-item__description-content">
+                    <div class="order-item__description">
+                      Taxes
+                    </div>
+                  </div>
+                  <div class="order-item__amount">$0.00</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="total-amount">
+            <div class="total-amount__title">
+              Total Amount:
+            </div>
+            <div class="total-amount__amount" id='cart-total'>
+              $599.99
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="payment-container"></div>
+    </div>
+    <script src="https://sdk.primer.io/web/v2.19.1/Primer.min.js" crossorigin="anonymous"></script>
+    <!-- Include your script to initialize the SDK and send data to Primer -->
+    <script src="/static/client.js"></script>
+    <script type="text/javascript">
+
+    document.getElementById('snowboard-quantity').addEventListener('change', function() {
+      
+        //console.log('You selected: ', document.getElementById('hoodie-amount').innerHTML);
+        let linePrice = Number(document.getElementById('hoodie-amount').innerHTML.replace(/[^0-9.-]+/g,""));
+        let quantity = this.value;
+        const cartTotal = linePrice * this.value;
+        console.log(cartTotal);
+        document.getElementById('cart-total').innerHTML = '$ '+cartTotal;
+    });
+      /* Set rates */
+      var taxRate = 0.05;
+      var fadeTime = 300;
+   
+    
+     
+   
+   
+      /* Recalculate cart */
+      function recalculateCart() {
+        var subtotal = 0;
+   
+        /* Sum up row totals */
+        $('.item').each(function() {
+          subtotal += parseFloat($(this).children('.product-line-price').text());
+        });
+   
+        /* Calculate totals */
+        var tax = subtotal * taxRate;
+        var total = subtotal + tax;
+   
+        /* Update totals display */
+        $('.totals-value').fadeOut(fadeTime, function() {
+         //  $('#cart-subtotal').html(subtotal.toFixed(2));
+         //  $('#cart-tax').html(tax.toFixed(2));
+          $('.total-amount__amount').html(total.toFixed(2));
+          if (total == 0) {
+            $('.checkout').fadeOut(fadeTime);
+          } else {
+            $('.checkout').fadeIn(fadeTime);
+          }
+          $('.total-amount__amount').fadeIn(fadeTime);
+        });
+      }
+   
+   
+      /* Update quantity */
+      function updateQuantity(quantityInput) {
+        /* Calculate line price */
+        console.log('quantity update');
+        var productRow = $(quantityInput).parent().parent();
+        var price = parseFloat(productRow.children('.order-item__amount').text());
+        var quantity = $(quantityInput).val();
+        var linePrice = price * quantity;
+   
+        /* Update line price display and recalc cart totals */
+        productRow.children('.order-item__amount').each(function() {
+          $(this).fadeOut(fadeTime, function() {
+            $(this).text(linePrice.toFixed(2));
+            recalculateCart();
+            $(this).fadeIn(fadeTime);
+          });
+        });
+      }
+   
+   
+    </script>
+  </body>
+</html>
